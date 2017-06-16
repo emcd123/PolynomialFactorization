@@ -31,10 +31,7 @@ def gcdCheck(GCD,U,u):
     else:
         print("All roots are prime,irreducible and distinct in U(x)")
 
-
 L = []
-
-
 def Remainder(dividend,divisor):
      return (dividend._maxima_().divide(divisor).sage())[1]
 
