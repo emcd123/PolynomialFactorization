@@ -1,3 +1,4 @@
+︠92f9d79b-abae-480b-bff4-d033dce8091e︠
 p=2
 %md F = field of characteristic 2
 F.<x> = PolynomialRing(GF(p))
@@ -30,6 +31,7 @@ def gcdCheck(GCD,U,u):
         print("There are repeated roots in U(x)")
     else:
         print("All roots are prime,irreducible and distinct in U(x)")
+
 
 L = []
 def Remainder(dividend,divisor):
@@ -68,9 +70,39 @@ zeroL(L)
 coefficientList(C)
 listFill(L,C)
 print(L)
-M = matrix(F,5,5, L)
-print(M)
 
+M = matrix(F,5,5, L)
+I = matrix.identity(5)
+
+M_I = M - I
+M_I.echelon_form()
+h = M_I.kernel()
+
+H = h.basis()
+print(H)
+
+P = [0,0]
+solnList = [H[0], H[1]]
+print("soln list: " ,solnList)
+
+def convertToPoly(solnList,P):
+    k = 0
+    for i in solnList:
+        for j in range(0,len(solnList[k])):
+            #print(solnList[k][j])
+            if(solnList[k][j] != 0):
+                U = (solnList[k][j])*(x^(j))
+                print(U)
+                P[k] = P[k] + U
+        print(P[k])
+        k = k+1
+
+convertToPoly(solnList,P)
+%md solution polynomial
+print(P)
+
+gcd(U,P[1]+1)
+gcd(U,P[1])
 
 #factorizing using the built in factor
 %md Prime fatorisation of U(x):
