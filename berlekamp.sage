@@ -1,17 +1,8 @@
-︠92f9d79b-abae-480b-bff4-d033dce8091e︠
-p=2
+p = 2
 %md F = field of characteristic 2
 F.<x> = PolynomialRing(GF(p))
 
-U = (x)^5 + (x)^4 + 1
-#show(U)
-dU = diff(U,x)
-#show(dU)
-
-GCD = gcd(U,dU)
-#show(GCD)
-
-def gcdCheck(GCD,U,u):
+def gcdCheck(GCD,U):
     if (GCD == 1):
         print("U(x) is squarefree")
     else:
@@ -20,41 +11,23 @@ def gcdCheck(GCD,U,u):
         else:
             print("d(x) = U(x)")
 
-    f = list(u)
-    #checking if any of the exponents on the factors is greater than 1
-    flag = 0
-    for i in range(0,4):
-        ord = f[i][1]
-        if (ord >1 ):
-            flag = flag + 1
-    if (flag == 1 ):
-        print("There are repeated roots in U(x)")
-    else:
-        print("All roots are prime,irreducible and distinct in U(x)")
-
-
-L = []
 def Remainder(dividend,divisor):
      return (dividend._maxima_().divide(divisor).sage())[1]
 
-li = []
-def findRemainders(li):
-    for k in range(0,5):
+def findRemainders(li, Degree):
+    for k in range(0,Degree):
        R = Remainder(x^(p*k), U)
        li.append(R)
        print(li)
 
-findRemainders(li)
-
-def zeroL(L):
-    for j in range(0,5):
+def zeroFill(L, Degree):
+    for j in range(0,Degree):
         l = []
-        for k in range(0,5):
+        for k in range(0,Degree):
             l.append(0)
         L.append(l)
     print(L)
 
-C =[]
 def coefficientList(C):
     for i in li:
         f = i.coefficients()
@@ -65,25 +38,6 @@ def listFill(L,C):
         for j in range(0,len(C[i])):
             e = C[i][j][1]
             L[i][e] = sqrt((C[i][j][0])^2)
-
-zeroL(L)
-coefficientList(C)
-listFill(L,C)
-print(L)
-
-M = matrix(F,5,5, L)
-I = matrix.identity(5)
-
-M_I = M - I
-M_I.echelon_form()
-h = M_I.kernel()
-
-H = h.basis()
-print(H)
-
-P = [0,0]
-solnList = [H[0], H[1]]
-print("soln list: " ,solnList)
 
 def convertToPoly(solnList,P):
     k = 0
@@ -97,15 +51,45 @@ def convertToPoly(solnList,P):
         print(P[k])
         k = k+1
 
-convertToPoly(solnList,P)
-%md solution polynomial
-print(P)
+U = (x)^5 + (x)^4 + 1
+dU = diff(U,x)
+GCD = gcd(U,dU)
+gcdCheck(GCD,U)
+deg = U.degree()
 
-gcd(U,P[1]+1)
-gcd(U,P[1])
+zeroList = []
+remainderList = []
+polyCoefficients =[]
 
-#factorizing using the built in factor
+findRemainders(remainderList, deg)
+zeroFill(zeroList, deg)
+coefficientList(polyCoefficients)
+listFill(zeroList,polyCoefficients)
+print(zeroList)
+
+M = matrix(F,deg,deg, zeroList)
+I = matrix.identity(deg)
+
+M_I = M - I
+M_I.echelon_form()
+h = M_I.kernel()
+
+H = h.basis()
+print(H)
+
+solnPolys = [0,0]
+solnList = [H[0], H[1]]
+print("soln list: " ,solnList)
+
+convertToPoly(solnList,solnPolys)
+%md Solution polynomial
+print(solnPolys)
+
+%md Prime Factorization of U(x) using Berlekamp algorithm
+gcd(U,solnPolys[1]+1)
+gcd(U,solnPolys[1])
+
+%md Factorizing using the built in factor
 %md Prime fatorisation of U(x):
 u = factor(U)
 show(u)
-#gcdCheck(GCD,U,u)
