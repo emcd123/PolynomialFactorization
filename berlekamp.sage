@@ -8,7 +8,8 @@ def gcdCheck(GCD,U):
     else:
         if(GCD != U):
             print("d(x) is a proper factor of U(x)")
-        else:
+            
+       else:
             print("d(x) = U(x)")
 
 def Remainder(dividend,divisor):
