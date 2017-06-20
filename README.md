@@ -1,2 +1,2 @@
-# LaTex_SageMath
+SageMath
 For a math project
