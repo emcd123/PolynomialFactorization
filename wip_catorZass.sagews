@@ -1,16 +1,17 @@
-%md F = Field of characteristic 3
+
+print "F = Field of characteristic 3"
 p = 3
 F.<x> = PolynomialRing(GF(p))
-def gcdCheck():
-    global U, GCD, pFactors
+
+def gcdCheck(U,GCD, pFactors):
+    #global  GCD, pFactors
     if(GCD == 1):
         return "U(x) is a squarefree polynomial"
     else:
         U = U/GCD
         dU = diff(U,x)
         GCD = gcd(U,dU)
-        pFactors.append(GCD)
-        gcdCheck()
+        gcdCheck(U, GCD, pFactors)
 
 def DDF(U):
     i = 1
@@ -23,14 +24,14 @@ def DDF(U):
     return f
 
 def random_between(j,k) :
-   a=int(random()*(k-j+1))+j
-   return a
+    a = int(random()*(k-j+1))+j
+    return a
 
 def randomPoly(U,f,j):
     r = 0
     degree = f[j].degree()
     for i in range(0,degree):
-        r = r + (random_between(1,p) * x^i)
+        r = r + random_between(1,p) * x^i
     return r
 
 
@@ -38,36 +39,32 @@ def factorize(U,f,j):
     V = f[j]
     r = randomPoly(U,f,j)
     deg = V.degree()
-    m = ((deg - 1)/(len(f) - 1)
-    d = gcd(V,(r)^m + 1)
+    m = (p^j - 1) / 2
+    R = r^m + 1
     factors = []
-    if(i < 3):
-        if (d == 1):
-            return factorize(U,f,j)
-        else:
+    max_factors = deg / j
+    while(len(factors) < max_factors):
+        d = gcd(V,R)
+        while(d == 1):
+            r = randomPoly(U,f,j)
+            d = gcd(V,(r)^m + 1)
+        if(d != 1):
             factors.append(d)
             V = V//d
-            i = i + 1
-            return factorize(U,f,j)
-    else:
-      return factors
+    return factors
 
 def Main():
-    #SquareFree Preparation
     U = x^7 + (2*x^5) + x^3 + 2*x
     #U = x^2 + x + 1
     dU = diff(U,x)
     GCD = gcd(U,dU)
-    gcdCheck()
-
-    f = DDF(U)
-    print(f)
     pFactors = []
+    gcdCheck(U, GCD, pFactors)
+    f = DDF(U)
     i  = 0
-    #for z in range(0,len(f)):
-        #li = factorize(U,f,z)
-        #p.factors.append(li)
-    #return pFactors
+    for z in range(1,len(f)):
+        li = factorize(U,f,z)
+        pFactors.append(li)
+    return pFactors
 
-print("echo")
 Main()

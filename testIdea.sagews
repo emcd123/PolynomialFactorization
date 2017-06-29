@@ -12,7 +12,7 @@ def gcdCheck():
         GCD = gcd(U,dU)
         pFactors.append(GCD)
         gcdCheck()
-
+ 
 def DDF(U,f):
     i = 1
     F = U
