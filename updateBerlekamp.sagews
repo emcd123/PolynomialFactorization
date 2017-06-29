@@ -14,24 +14,30 @@ def gcdCheck(GCD,U):
 def Remainder(dividend,divisor):
      return (dividend._maxima_().divide(divisor).sage())[1]
 
-def findRemainders(li, Degree):
+def findRemainders(Degree,U):
+    li = []
     for k in range(0,Degree):
        R = Remainder(x^(p*k), U)
        li.append(R)
+    return li
 
 #Create a list of lists of zero's
-def zeroFill(L, Degree):
+def zeroFill(Degree):
+    zeroList = []
     for j in range(0,Degree):
         l = []
         for k in range(0,Degree):
             l.append(0)
-        L.append(l)
+        zeroList.append(l)
+    return zeroList
 
 #Find the polynomial coefficients
-def coefficientList(C,li):
+def coefficientList(li):
+    polyCoefficients =[]
     for i in li:
         f = i.coefficients()
-        C.append(f)
+        polyCoefficients.append(f)
+    return polyCoefficients
 
 #Modified the zero lists to contain the coefficients of polynomials
 def listFill(L,C):
@@ -39,16 +45,31 @@ def listFill(L,C):
         for j in range(0,len(C[i])):
             e = C[i][j][1]
             L[i][e] = sqrt((C[i][j][0])^2)
+    return L
+
+def matrixSolns(Degree, L):
+    #Feed our lists into a matrix and solve
+    M = matrix(F,Degree,Degree, L)
+    I = matrix.identity(Degree)
+
+    M_I = M - I
+    h = M_I.kernel()
+    H = h.basis()
+    return H
 
 #Convert the coefficient matrix rows back to polynomial form
-def convertToPoly(solnList,P):
+def convertToPoly(H):
     k = 0
+    solnPolys = [0,0]
+    solnList = [H[0], H[1]]
     for i in solnList:
         for j in range(0,len(solnList[k])):
             if(solnList[k][j] != 0):
                 U = (solnList[k][j])*(x^(j))
-                P[k] = P[k] + U
+                solnPolys[k] = solnPolys[k] + U
         k = k+1
+    return solnPolys
+
 def Main():
     #Define thepolynomial and check for squarefreeness
     U = (x)^5 + (x)^4 + 1
@@ -57,33 +78,16 @@ def Main():
     gcdCheck(GCD,U)
     deg = U.degree()
 
-    zeroList = []
-    remainderList = []
-    polyCoefficients =[]
-
-    findRemainders(remainderList, deg)
-    zeroFill(zeroList, deg)
-    coefficientList(polyCoefficients,remainderList)
-    listFill(zeroList,polyCoefficients)
-
-    #Feed our lists into a matrix and solve
-    M = matrix(F,deg,deg, zeroList)
-    I = matrix.identity(deg)
-
-    M_I = M - I
-    h = M_I.kernel()
-    H = h.basis()
+    filledList = listFill(zeroFill(deg),coefficientList(findRemainders(deg, U)))
 
     #Take matrix solutions and add to a list,then convert back to polynomial form
-    solnPolys = [0,0]
-    solnList = [H[0], H[1]]
-    convertToPoly(solnList,solnPolys)
+    polynomials = convertToPoly(matrixSolns(deg,filledList))
 
     %md Prime Factorization of U(x) using Berlekamp algorithm:
-    gcd(U,solnPolys[1]+1)
-    gcd(U,solnPolys[1])
+    pFactors = []
+    pFactors.append(gcd(U,polynomials[1]+1))
+    pFactors.append(gcd(U,polynomials[1]))
 
-    %md Prime fatorisation of U(x) using the built in factor method:
-    factor(U)
+    return pFactors
 
 Main()
