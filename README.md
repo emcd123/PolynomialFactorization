@@ -1,8 +1,9 @@
 # Factorizorizing Polynomials over Finite Fields 
 
-###### Details:
+### Details:
 
 **Written by:** emcd123
+
 **For:** Summer Internship Programme with the *College of mathematics* at NUIG(*National University of Ireland Galway*)
 
 ## Project Description: 
