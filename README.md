@@ -1,5 +1,10 @@
 # Factorizorizing Polynomials over Finite Fields 
 
+###### Details:
+
+**Written by:** emcd123
+**For:** Summer Internship Programme with the *College of mathematics* at NUIG(*National University of Ireland Galway*)
+
 ## Project Description: 
 
 The aim of this project is to study algorithms for *factorization of polynomials  
