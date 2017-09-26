@@ -1,6 +1,6 @@
-#Factorizorizing Polynomials over Finite Fields
+#Factorizorizing Polynomials over Finite Fields #
 
-##Project Description:
+##Project Description: #
 
 The aim of this project is to study algorithms for factorization of polynomials  
 over finite fields. Such factorizations are interesting in applications of  
@@ -18,17 +18,17 @@ computational complexity that was introduced in 1981. In contrast to
 Berlekamp's algorithm, it is a probabilistic algorithm.  
 
 
-##Contents:
+##Contents: #
 
 ###Source code files for project
 FinalBerlekamp.sagews
 CantorZassenhaus.sagews
 
-###Discarded Folder:
+###Discarded Folder: #
 
 Contains failed or incomplete attempts at implementing these algorithms
 
-###Other Files:
+###Other Files: #
 
 Are simply me attempting to use SageMath  
 
