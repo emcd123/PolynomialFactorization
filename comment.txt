@@ -1,1 +1,0 @@
-max number of factors is = to degree(f_i(x))/i
